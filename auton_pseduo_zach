@@ -1,0 +1,68 @@
+// Auton First Step
+void start() {
+
+  // Get current GPS X coordinate and current GPS Y coordinate
+  double x_coord = GPS15.xPosition(mm);
+  double y_coord = GPS15.yPosition(mm);
+
+  // check if the bot is at the correct starting location
+  if x_coord > 1200 && y_coord > 1600 {
+    Controller.Screen.print("Current X position: %.1f", x_coord);
+    Controller.Screen.print("Current Y position: %.1f", y_coord);
+  } else {
+    Controller.Screen.print("Mission Failed");
+  }
+
+}
+
+// Auton Second Step
+void R_Ring1() {
+
+  // first check to make sure the ring is red
+  red_Info();
+
+  // get the distance from the ring to the bot
+  red1_distance = dis_Info();
+
+  // if logic to check if the AI sensor sees the first red ring and the distance value is close enough to intake
+  // call intake function here
+
+  // else the bot will drive forward until the ring is seen
+
+}
+
+// Auton Third Step
+void R_Ring2() {
+
+  // first turn 90 degrees to the right
+
+  // next check to make sure the ring is red
+  red_Info();
+
+  // get the distance from the ring to the bot
+  red2_distance = dis_Info();
+
+  // if logic to check if the AI sensor sees the second red ring and the distance value is close enough to intake
+  // call intake function here
+
+  // else the bot will drive forward until the ring is seen
+
+}
+
+// Auton Fourth Step
+void M_Stake1() {
+
+  // check to make sure the stake is found
+  yellow_Info();
+
+  // get the distance from the stake to the bot
+  stake1_distance = dis_Info();
+
+  // if logic to check if the AI sensor sees the stake and the distance value is close enough to intake
+  // stop moving, and turn 180 degrees, back side of the bot should face the stake
+  // from here reverse until GPS X and Y are at the stake's coords of (1.2m, 0.6m)
+  // call the clamp function to grab and clamp the stake to the bot
+  
+  // else the bot will drive forward until the stake is seen
+  
+}
