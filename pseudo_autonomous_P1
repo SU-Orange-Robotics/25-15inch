@@ -1,0 +1,54 @@
+// Using the autonomous_pathing Version 0.1 code, create functions for the following pseduo code 
+// Note: Smaller Bot's starting location is up against the wall, with the front facing the red ring in the corner of field
+
+// Pseudo Function 1: Check to see if bot's starting location is at (1.2 m, 1.6 m) or (1200 mm, 1600 mm)
+void start(){
+  get current GPS X coordinate 
+  get current GPS Y coordinate
+  if GPS X > 1200 (mm) & GPS Y > 1600 {
+    (Console or Brain) Print Current GPS X & Y Position 
+  }
+  else {
+    (Console or Brain) Print "Mission Failed" 
+  }
+}
+
+// Pseudo Function 2: Get Red Ring 1 in corner
+void R_Ring1() {
+  red_Info();
+  val_Dis = dis_Info();
+  if AI Vision sensor sees Red Ring 1 & val_Dis is close enough for bot to intake {
+    Intake(); // Have a print command or some place holder until intake system is created   
+  }
+  else {
+    Drive forward 
+  }
+}
+
+// Pseudo Function 3: Get Red Ring 2 @ (1.2 m, 1.2 m)
+void R_Ring2() {
+  Turn 90 degrees right
+  red_Info();
+  val_Dis = dis_Info();
+  if AI Vision sensor sees Red Ring 2 & val_Dis is close enough for bot to intake {
+    Intake_Ring(); // Have a print command or some place holder until intake system is created   
+  }
+  else {
+    Drive forward
+  }
+}
+  
+// Pseudo Function 4: Grab Mobile Stake 1 @ (1.2 m, 0.6 m) 
+void M_Stake1() {
+  yellow_Info();
+  val_Dis = dis_Info();
+  if AI Vision sensor sees yellow stake & val_Dis is close enough {
+    Stop
+    Turn 180 degrees // The bot should have its back side facing Mobile Stake 1
+    Reverse until GPS X & Y Position is @ (1.2 m, 0.6 m)
+    Clamp_Mobile_Stake(); // Have a print command or some place holder until clamp system is created
+  }
+  else {
+    Drive forward
+  }
+}
