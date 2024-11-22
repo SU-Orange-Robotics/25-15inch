@@ -1,0 +1,178 @@
+#include "vex.h"
+
+using namespace vex;
+
+vex::brain       Brain;
+
+competition Competition;
+
+// define your global instances of motors and other devices here
+
+/* Controller */
+
+controller Controller = (controllerType::primary);
+
+/*
+    Axis1 - Left & Right of the Right Joystick
+    Axis2 - Up & Down of the Right Joystick
+    Axis3 - Up & Down of the Left Joystick
+    Axis4 - Left & Right of the Left Joystick
+*/
+
+/* Motors */
+
+motor LeftMotorA(PORT11, gearSetting::ratio18_1, true); //
+motor LeftMotorB(PORT12, gearSetting::ratio18_1, false); // because of gearing, middle one is opposite
+motor LeftMotorC(PORT13, gearSetting::ratio18_1, true); //
+
+motor RightMotorA(PORT18, gearSetting::ratio18_1, false);
+motor RightMotorB(PORT19, gearSetting::ratio18_1, true); // because of gearing, middle one is opposite
+motor RightMotorC(PORT20, gearSetting::ratio18_1, false);
+
+motor_group leftMotors = motor_group(LeftMotorA,LeftMotorB,LeftMotorC);
+motor_group rightMotors = motor_group(RightMotorA, RightMotorB,RightMotorC);
+drivetrain Drivetrain = drivetrain(leftMotors, rightMotors, 259.34, 320, 40, mm, 1);
+
+
+/* AI Vision Sensor */
+
+enum gameElements {
+  mobileGoal,
+  redRing,
+  blueRing,
+};
+
+// AI Vision Color Descriptions
+aivision::colordesc aiVision17_Red(1, 235, 77, 139, 30, 0.3);
+aivision::colordesc aiVision17_Blue(2, 55, 147, 200, 28, 0.3);
+aivision::colordesc aiVision17_Yellow(3, 183, 220, 130, 30, 0.75);
+
+// AI Vision Code Descriptions
+vex::aivision aiVision17(PORT17, aiVision17_Red, aiVision17_Blue, aiVision17_Yellow, aivision::ALL_AIOBJS);
+
+/* GPS Sensor */
+
+gps GPS15 = gps(PORT15, 0);
+
+/* Distance Sensor */
+
+distance Distance16 = distance(PORT16); 
+
+// Useful functions to use with sensors
+
+/* AI Vision Sensor Methods */
+
+// Display Red Ring Information 
+void red_Info(){ 
+  aiVision17.takeSnapshot(aiVision17_Red);
+  if (aiVision17.objects[0].id == 1) {
+    Brain.Screen.setCursor(1,1);
+    Brain.Screen.print("Red Ring");
+    
+    Brain.Screen.setCursor(2,1);
+    Brain.Screen.print("X Pos: %d", aiVision17.objects[0].centerX);
+    
+    Brain.Screen.setCursor(3,1);
+    Brain.Screen.print("Y Pos: %d", aiVision17.objects[0].centerY);
+
+    Brain.Screen.setCursor(4,1);
+    Brain.Screen.print("Width: %d", aiVision17.objects[0].width);
+
+    Brain.Screen.setCursor(5,1);
+    Brain.Screen.print("Height: %d", aiVision17.objects[0].height);
+
+    Brain.Screen.setCursor(6,1);
+    Brain.Screen.print("Origin X: %d", aiVision17.objects[0].originX);
+
+    Brain.Screen.setCursor(7,1);
+    Brain.Screen.print("Origin Y: %d", aiVision17.objects[0].originY);
+  } 
+}
+
+// Display Blue Ring Information 
+void blue_Info(){
+  aiVision17.takeSnapshot(aiVision17_Blue);
+  if (aiVision17.objects[0].id == 2) {
+    Brain.Screen.setCursor(1,1);
+    Brain.Screen.print("Blue Ring");
+    
+    Brain.Screen.setCursor(2,1);
+    Brain.Screen.print("X Pos: %d", aiVision17.objects[0].centerX);
+    
+    Brain.Screen.setCursor(3,1);
+    Brain.Screen.print("Y Pos: %d", aiVision17.objects[0].centerY);
+
+    Brain.Screen.setCursor(4,1);
+    Brain.Screen.print("Width: %d", aiVision17.objects[0].width);
+
+    Brain.Screen.setCursor(5,1);
+    Brain.Screen.print("Height: %d", aiVision17.objects[0].height);
+
+    Brain.Screen.setCursor(6,1);
+    Brain.Screen.print("Origin X: %d", aiVision17.objects[0].originX);
+
+    Brain.Screen.setCursor(7,1);
+    Brain.Screen.print("Origin Y: %d", aiVision17.objects[0].originY);
+  } 
+}
+
+// Display Mobile Stake Information 
+void yellow_Info(){
+  Brain.Screen.clearScreen();
+  Controller.Screen.clearScreen();
+  
+  aiVision17.takeSnapshot(aiVision17_Yellow);
+  if (aiVision17.objects[0].id == 3) {
+    Brain.Screen.setCursor(1,1);
+    Brain.Screen.print("Mobile Stake");
+    
+    Brain.Screen.setCursor(2,1);
+    Brain.Screen.print("X Pos: %d", aiVision17.objects[0].centerX);
+    
+    Brain.Screen.setCursor(3,1);
+    Brain.Screen.print("Y Pos: %d", aiVision17.objects[0].centerY);
+
+    Brain.Screen.setCursor(4,1);
+    Brain.Screen.print("Width: %d", aiVision17.objects[0].width);
+
+    Brain.Screen.setCursor(5,1);
+    Brain.Screen.print("Height: %d", aiVision17.objects[0].height);
+
+    Brain.Screen.setCursor(6,1);
+    Brain.Screen.print("Origin X: %d", aiVision17.objects[0].originX);
+
+    Brain.Screen.setCursor(7,1);
+    Brain.Screen.print("Origin Y: %d", aiVision17.objects[0].originY);
+  } 
+}
+
+/* GPS Sensor Methods */
+
+// Display GPS Position in the x-direction  
+double getX(){
+  Controller.Screen.setCursor(1,1);
+  double x_Pos = GPS15.xPosition(mm);
+  Controller.Screen.print("X Pos: %.1f", x_Pos);
+  return x_Pos;
+}
+
+// Display GPS Position in the y-direction  
+double getY(){
+  Controller.Screen.setCursor(2,1);
+  double y_Pos = GPS15.yPosition(mm);
+  Controller.Screen.print("Y Pos: %.1f", y_Pos);  
+  return y_Pos;
+}
+
+/* Distance Sensor Methods */
+
+// Display Distance (in millimeters) away from nearest object
+double dis_Info(){
+    if (Distance16.isObjectDetected() == true){
+        double val_Dis = Distance16.objectDistance(mm);
+        return val_Dis;
+    }
+    else{
+      return 0;
+    }
+}
