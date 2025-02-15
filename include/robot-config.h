@@ -17,7 +17,8 @@ extern motor RightMotorC;
 // other motors
 extern motor Intake;
 extern motor Chainlift;
-extern motor MogoMech;
+extern motor MogoMech1;
+extern motor MogoMech2;
 
 // sensors
 extern optical ColorSensor;

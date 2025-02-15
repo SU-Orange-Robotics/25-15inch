@@ -5,13 +5,16 @@
 using namespace vex;
 
 void mogoDown() {
-    MogoMech.spin(directionType::fwd, mechPow, percentUnits::pct);
+    MogoMech1.spin(directionType::fwd, mechPow, percentUnits::pct);
+    MogoMech2.spin(directionType::fwd, mechPow, percentUnits::pct);
 }
 
 void mogoUp() {
-    MogoMech.spin(directionType::rev, mechPow, percentUnits::pct);
+    MogoMech1.spin(directionType::rev, mechPow, percentUnits::pct);
+    MogoMech2.spin(directionType::rev, mechPow, percentUnits::pct);
 }
 
 void mogoStop() {
-    MogoMech.stop(brakeType::hold);
+    MogoMech1.stop(brakeType::hold);
+    MogoMech2.stop(brakeType::hold);
 }

@@ -30,7 +30,8 @@ void pre_auton(void) {
   // All activities that occur before the competition starts
   // Example: clearing encoders, setting servo positions, ...
 
-  MogoMech.setStopping(brakeType::hold);
+  MogoMech1.setStopping(brakeType::hold); 
+  MogoMech2.setStopping(brakeType::hold);
 
   LeftMotorA.setStopping(brakeType::brake);
   LeftMotorB.setStopping(brakeType::brake);
@@ -56,8 +57,10 @@ void autonomous(void) {
   // Insert autonomous user code here.
   // ..........................................................................
 
-  // best auton i've ever written. So efficent, just one line!
-  drive.driveForward(60, 0.5);
+  //drive.driveForward(60, 0.5);
+  drive.arcadeDrive(70, 0);
+  wait(500, timeUnits::msec);
+  drive.stop();
 
 }
 
